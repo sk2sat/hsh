@@ -25,6 +25,14 @@ int main(int argc, char **argv){
 	buf_len = DEFAULT_BUF_LEN;
 	fp = stdin;
 	
+	if(argc == 2){
+		fp = fopen(argv[1], "r");
+		if(fp == NULL){
+			printf("can't open \"%s\"", argv[1]);
+			return -1;
+		}
+	}
+	
 	usage();
 	
 	for(;;){
@@ -42,6 +50,7 @@ int main(int argc, char **argv){
 		if(c == '\n' || c == EOF){
 			prompt_flg = 1;
 			int ret = exec(buf, buf_len);
+			if(c == EOF) fp = stdin;
 			if(ret == IGNORE_NEWLINE) continue;
 			memset(buf, '\0', buf_len);
 			p=0;
